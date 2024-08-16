@@ -1,10 +1,8 @@
 import hero.Calidad;
 import hero.Hero;
 import base.GameEnginer;
-import hero.ItemsHero;
-import taberna.CreateMision;
+import saveCharge.SaveChargeFile;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Launcher {
@@ -31,12 +29,14 @@ public class Launcher {
                     System.out.println("Hola capullo/a de turno en este caso Bruno." +
                             " Lo más importante es escoger un nombre para tu héroe!! guay, grandioso... Di un dichoso nombre:");
                     String nombre = sc.nextLine();
-                    System.out.println("Encantado de conocerte capitán Gilipollas. Te vas a creer que vas a escoger nombre en MI juego, jeje. Bueno al meollo disfruta!");
-                    Hero hero = new Hero("Gilipollas", 1,100,30,0,50,50,10,10,10, 15, Calidad.STANDARD, ItemsHero.Inventario(), null, CreateMision.listaMisiones());
+                    System.out.println("Encantado de conocerte capitán Gilipollas. Te vas a creer que vas a escoger nombre "+ nombre + " en MI juego, jeje. Bueno al meollo disfruta!");
+                    Hero hero = new Hero("Gilipollas", 1,100,30,0,50,50,10,10, 15, 15, Calidad.STANDARD,null);
                     GameEnginer.Posada(hero, sc);
                     break;
                 case 2:
-                    System.out.println("Cargando partida");
+                    String archivo = "DataSave.txt";
+                    System.out.println("Cargando Archivos");
+                    GameEnginer.Posada(SaveChargeFile.cargarDatos(archivo), sc);
                     break;
                 case 3:
                     System.out.println("Saliendo del juego... Espero que hayas guardado");
@@ -44,7 +44,7 @@ public class Launcher {
                     break;
                 default:
                     if (counter == 2) {
-                        System.out.println("Eres un troll que solo molesta a sus putos padres porque le dejan y le dan de todo. Te cierro el puto juego.");
+                        System.out.println("Eres un troll de mierda que solo molesta a sus putos padres porque le dejan y le dan de todo. Te cierro el puto juego.");
                         salir = true;
                         break;
                     }

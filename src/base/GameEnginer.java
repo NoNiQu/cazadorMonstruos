@@ -3,14 +3,13 @@ package base;
 import enemy.Enemy;
 import hero.Calidad;
 import hero.Hero;
-import hero.ItemsHero;
+import hero.TipoObjeto;
 import map.Overworld;
-import taberna.CreateItemsTienda;
+import saveCharge.SaveChargeFile;
 import taberna.Mision;
 import taberna.CreateMision;
 import map.CreateZoneMap;
 import map.ZoneMap;
-import taberna.Tienda;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -51,7 +50,6 @@ public class GameEnginer {
                     misionesDisponibles(hero, zonaSeleccionada(sc), sc);
                     break;
                 case 2:
-                    System.out.println("Que recompensa quieres entregar");
                     entregaMision(hero);
                     break;
                 case 3:
@@ -68,7 +66,8 @@ public class GameEnginer {
                     dormir(hero, dormir);
                     break;
                 case 6:
-                    System.out.println("GUARDA PARTIDA");
+                    String archivo = "DataSave.txt";
+                    SaveChargeFile.guardarDatos(archivo,hero);
                     break;
                 case 7:
                     if (herreroLoco){
@@ -164,87 +163,105 @@ public class GameEnginer {
     }
 
     private static void entregaPociones(Hero hero) {
-        ItemsHero ayuda = new ItemsHero(1, "Pocion de vida", "Recupera 50 puntos de vida", 0);
+        Items ayuda = new Items("Agua natural BEYOZA", TipoObjeto.CURE,25, 2, true);
 
         System.out.println("Toma esto... te ayudara");
 
         if (hero.getMisionActual().getRango().equals("C"))
-            hero.addInventory(ayuda,2);
+            hero.addInventory(ayuda);
         else if (hero.getMisionActual().getRango().equals("B"))
-            hero.addInventory(ayuda,4);
+            hero.addInventory(ayuda);
         else
-            hero.addInventory(ayuda,6);
+            hero.addInventory(ayuda);
 
         System.out.println("Se han añadido " +ayuda.getNombre() + " a tu inventario.");
     }
 
     private static void entregaMision(Hero hero) {
-        System.out.println("Vamos a ver que tenemos");
-        String item = hero.getMisionActual().getNombreItem();
-        int cantidad = hero.getMisionActual().getCantidad();
+        System.out.println("Vamos a ver qué tenemos");
 
-        boolean misionCompletada= (Hero.buscarObjetoMision(hero, item, cantidad));
-        if (misionCompletada){
+        boolean misionCompletada = Hero.buscarObjetoMision(hero.getItemMision(), hero.getMisionActual().getNombreItem());
+        if (misionCompletada) {
             hero.addMision(hero.getMisionActual());
+            hero.setMoney(hero.getMoney() + hero.getMisionActual().getRecompensa());
+            hero.setExp(hero.getMisionActual().getRecompensa()); // Asumimos que la recompensa es la experiencia
+            System.out.println("¡Misión Entregada! Recompensa: " + hero.getMisionActual().getRecompensa() + " oros, tanto en oro como en experiencia");
+            hero.removeItemMision(hero.getMisionActual().getNombreItem());
             hero.setMisionActual(null);
+        } else {
+            System.out.println("No has completado la misión. Aún te falta algo.");
         }
-
     }
 
     private static void abrirTienda(Hero hero, Scanner sc) {
-        ArrayList<Tienda>tiendas = CreateItemsTienda.tienda();
+        ArrayList<Items> tiendas = Items.tienda(hero);
 
-        for(Tienda tienda: tiendas){
-            System.out.println(tienda);
+        for (int i = 0; i < tiendas.size(); i++) {
+            System.out.println((i + 1) + ". " + tiendas.get(i).getNombre() + " - Coste: " + tiendas.get(i).getCantidadCoste());
         }
 
-        System.out.println("Saldo: "+ hero.getMoney());
-        System.out.println("Deseas comprar algo?\n1. Si\n2. No");
+        System.out.println("Saldo: " + hero.getMoney());
+        System.out.println("¿Deseas comprar algo?\n1. Sí\n2. No");
 
         int opcion = sc.nextInt();
         sc.nextLine();
 
-        if(opcion==1){
-            System.out.println("Que deseas comprar? Introduce el numero del item");
-            int itemNombre = sc.nextInt();
-            System.out.println("Cuantos quieres?");
-            int cantidad = sc.nextInt();
-            sc.nextLine();
-            comprar(itemNombre, cantidad, tiendas, hero);
-        }else
-            System.out.println("Hasta la proxima");
-
+        if (opcion == 1) {
+            System.out.println("¿Qué deseas comprar? Introduce el número del artículo");
+            int itemIndex = sc.nextInt() - 1;
+            if (itemIndex >= 0 && itemIndex < tiendas.size()) {
+                System.out.println("¿Cuántos quieres?");
+                int cantidad = sc.nextInt();
+                sc.nextLine();
+                comprar(itemIndex, cantidad, tiendas, hero);
+            } else {
+                System.out.println("Artículo no válido.");
+            }
+        } else {
+            System.out.println("Hasta la próxima");
+        }
     }
 
-    private static void comprar(int item, int cantidad, ArrayList<Tienda>tiendas, Hero hero) {
-        for (Tienda tienda: tiendas){
-            if(item == tienda.getId()){
-                int suma = tienda.getCoste()*cantidad;
-                if (suma <= hero.getMoney()){
-                    hero.addInventory(tienda,cantidad);
-                    hero.setMoney(hero.getMoney()-suma);
-                }else{
-                    System.out.println("No tienes suficiente dinero");
-                    System.out.println("Coste de compra: "+suma);
-                    System.out.println("Saldo actual: "+ hero.getMoney());
-                }
-            }else
-                System.out.println("Codigo introducido incorrecto");
+    private static void comprar(int itemIndex, int cantidad, ArrayList<Items> tiendas, Hero hero) {
+        Items tienda = tiendas.get(itemIndex);
+
+        int suma = tienda.getCantidadCoste() * cantidad;
+
+        if (suma <= hero.getMoney()) {
+
+            Items itemComprado = new Items(
+                    tienda.getNombre(),
+                    tienda.getTipoObjeto(),
+                    tienda.getEfecto(),
+                    cantidad,
+                    tienda.isCombat()
+            );
+
+            hero.addInventory(itemComprado);
+
+            hero.setMoney(hero.getMoney() - suma);
+
+            System.out.println("Has comprado " + cantidad + " de " + tienda.getNombre());
+            System.out.println("Saldo restante: " + hero.getMoney());
+        } else {
+            System.out.println("No tienes suficiente dinero.");
+            System.out.println("Coste de la compra: " + suma);
+            System.out.println("Saldo actual: " + hero.getMoney());
         }
     }
 
     private static void abrirHerrero(Hero hero, Scanner sc) {
         String secretItem = "SHINE ROCKS";
 
-        if(Hero.buscarObjetoBool(hero, secretItem)){
+        if(Hero.buscarObjetoBool(secretItem)){
             eventoHerreroEspecial(secretItem, hero);
         }
-        else if(hero.getEquipamiento()==Calidad.EPIC){
+        else if(hero.getTipoCalidad()==Calidad.EPIC){
             System.out.println("Tu equipamiento esta al tope.");
         }else {
             System.out.println("Vamos a mejorar tu equipamiento");
             System.out.println("Tu saldo es: "+hero.getMoney() + " oros");
-            System.out.println("Tu equipamiento actualmente esta en calidad: "+ hero.getEquipamiento());
+            System.out.println("Tu equipamiento actualmente esta en calidad: "+ hero.getTipoCalidad());
 
             mejorarEquipamiento(hero,sc);
         }
@@ -253,7 +270,7 @@ public class GameEnginer {
 
     private static void mejorarEquipamiento(Hero hero, Scanner sc) {
         int precio;
-        if(hero.getEquipamiento()==Calidad.RARE){
+        if(hero.getTipoCalidad()==Calidad.RARE){
             precio = 50;
             System.out.println("Para mejorar tu armadura a: " +Calidad.EPIC + " son " +precio+ " oros");
             System.out.println("Deseas deseas mejorarlo?\n1. Si\n2. No");
@@ -263,7 +280,7 @@ public class GameEnginer {
 
             if(opcion==1){
                 if(hero.getMoney()>=precio){
-                    hero.setEquipamiento(Calidad.EPIC);
+                    hero.setTipoCalidad(Calidad.EPIC);
                 }else
                     System.out.println("No tienes suficiente dinero");
             }else
@@ -279,7 +296,7 @@ public class GameEnginer {
 
             if(opcion==1){
                 if(hero.getMoney()>=precio){
-                    hero.setEquipamiento(Calidad.RARE);
+                    hero.setTipoCalidad(Calidad.RARE);
                 }else
                     System.out.println("No tienes suficiente dinero");
             }else
@@ -289,8 +306,8 @@ public class GameEnginer {
 
     private static void eventoHerreroEspecial(String secretItem, Hero hero) {
         System.out.println("Shiny Shiny... Give me that BIIIIIIIIIIITCH");
-        hero.removeInventory(Hero.buscarObjeto(hero, secretItem));
-        hero.setEquipamiento(Calidad.LEGEND);
+        Hero.removeInventory(Hero.buscarObjeto(secretItem));
+        hero.setTipoCalidad(Calidad.LEGEND);
         herreroLoco = true;
         System.out.println("Tu equipamiento ha sido mejorado a calidad: LEGENDARIA");
         System.out.println("El herrero te expulsa de una patada");
@@ -299,7 +316,7 @@ public class GameEnginer {
     private static void dormir(Hero hero, int coste) {
         if(hero.getMoney() >= coste){
             System.out.println("Que pases buena noche");
-            hero.setLifeAcual(hero.getLifeMax());
+            hero.setLife(hero.getLifeMax());
             System.out.println("Tu vida se ha restaurado");
         }
         else

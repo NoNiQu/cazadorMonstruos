@@ -5,18 +5,26 @@ public class Mision {
     private String rango;
     private String nombre;
     private String descripcion;
-    private int cantidad;
     private String nombreItem;
     private int recompensa;
 
-    public Mision(String zona, String rango, String nombre, String descripcion, int cantidad, String nombreItem, int recompensa) {
+    public Mision(String zona, String rango, String nombre, String descripcion, String nombreItem, int recompensa) {
         this.zona = zona;
         this.rango = rango;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.cantidad = cantidad;
         this.nombreItem = nombreItem;
         this.recompensa = recompensa;
+    }
+
+    public Mision(String data) {
+        String[] parts = data.split(",");
+        this.zona = parts[0];
+        this.rango = parts[1];
+        this.nombre = parts[2];
+        this.descripcion = parts[3];
+        this.nombreItem = parts[4];
+        this.recompensa = Integer.parseInt(parts[5]);
     }
 
     public String getZona() {
@@ -51,14 +59,6 @@ public class Mision {
         this.descripcion = descripcion;
     }
 
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
     public String getNombreItem() {
         return nombreItem;
     }
@@ -82,7 +82,6 @@ public class Mision {
                 ", rango='" + rango + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
-                ", cantidad=" + cantidad +
                 ", nombreItem='" + nombreItem + '\'' +
                 ", recompensa=" + recompensa +
                 '}';

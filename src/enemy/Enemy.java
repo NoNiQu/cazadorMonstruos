@@ -2,7 +2,7 @@ package enemy;
 
 public class Enemy {
     private int id;
-    private String rank;
+    private String subZona;
     private int life;
     private int maxLife;
     private String name;
@@ -14,9 +14,9 @@ public class Enemy {
     private String zone;
     private boolean boss;
 
-    public Enemy(int id, String rank, int life, int maxLife, String name, int dmg, int def, int speed, int dropExperience, String dropItem, String zone, boolean boss) {
+    public Enemy(int id, String subZona, int life, int maxLife, String name, int dmg, int def, int speed, int dropExperience, String dropItem, String zone, boolean boss) {
         this.id = id;
-        this.rank = rank;
+        this.subZona = subZona;
         this.life = life;
         this.maxLife = maxLife;
         this.name = name;
@@ -37,12 +37,12 @@ public class Enemy {
         this.id = id;
     }
 
-    public String getRank() {
-        return rank;
+    public String getSubZona() {
+        return subZona;
     }
 
-    public void setRank(String rank) {
-        this.rank = rank;
+    public void setSubZona(String subZona) {
+        this.subZona = subZona;
     }
 
     public int getLife() {
@@ -129,7 +129,7 @@ public class Enemy {
     public String toString() {
         return "Enemy{" +
                 "id=" + id +
-                ", rank='" + rank + '\'' +
+                ", subZona='" + subZona + '\'' +
                 ", life=" + life +
                 ", maxLife=" + maxLife +
                 ", name='" + name + '\'' +

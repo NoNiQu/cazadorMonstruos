@@ -1,42 +1,45 @@
 package hero;
 
+import base.Items;
 import taberna.Mision;
-import taberna.Tienda;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Hero {
     private String name;
     private int level;
-    private int nextlvl;
-    private int lvlMax;
-    private int experencie;
-    private int lifeAcual;
+    private int levelMax;
+    private int exp;
+    private int expNext;
+    private int life;
     private int lifeMax;
-    private int dmg;
-    private int def;
+    private int attack;
+    private int defense;
     private int speed;
     private int money;
-    private Calidad equipamiento;
-    private ArrayList<ItemsHero>inventory;
+    private Calidad tipoCalidad;
+    private static HashMap<String, Items> inventory;
     private Mision misionActual;
-    private ArrayList<Mision>misionesCompletas;
+    private ArrayList<String> itemMision;
+    private ArrayList<Mision> misionesCompletadas;
 
-    public Hero(String name, int level, int nextlvl, int lvlMax, int experencie, int lifeAcual, int lifeMax, int dmg, int def, int speed, int money, Calidad equipamiento, ArrayList<ItemsHero> inventory, Mision misionActual, ArrayList<Mision> misionesCompletas) {
+    public Hero(String name, int level, int levelMax, int exp, int expNext, int life, int lifeMax, int attack, int defense, int speed, int money, Calidad tipoCalidad, Mision misionActual) {
         this.name = name;
         this.level = level;
-        this.nextlvl = nextlvl;
-        this.lvlMax = lvlMax;
-        this.experencie = experencie;
-        this.lifeAcual = lifeAcual;
+        this.levelMax = levelMax;
+        this.exp = exp;
+        this.expNext = expNext;
+        this.life = life;
         this.lifeMax = lifeMax;
-        this.dmg = dmg;
-        this.def = def;
+        this.attack = attack;
+        this.defense = defense;
         this.speed = speed;
         this.money = money;
-        this.equipamiento = equipamiento;
-        this.inventory = inventory;
+        this.tipoCalidad = tipoCalidad;
+        inventory = new HashMap<>();
         this.misionActual = misionActual;
-        this.misionesCompletas = misionesCompletas;
+        this.itemMision = new ArrayList<>();
+        this.misionesCompletadas =new ArrayList<>();
     }
 
     public String getName() {
@@ -55,36 +58,36 @@ public class Hero {
         this.level = level;
     }
 
-    public int getNextlvl() {
-        return nextlvl;
+    public int getLevelMax() {
+        return levelMax;
     }
 
-    public void setNextlvl(int nextlvl) {
-        this.nextlvl = nextlvl;
+    public void setLevelMax(int levelMax) {
+        this.levelMax = levelMax;
     }
 
-    public int getLvlMax() {
-        return lvlMax;
+    public int getExp() {
+        return exp;
     }
 
-    public void setLvlMax(int lvlMax) {
-        this.lvlMax = lvlMax;
+    public void setExp(int exp) {
+        this.exp = exp;
     }
 
-    public int getExperencie() {
-        return experencie;
+    public int getExpNext() {
+        return expNext;
     }
 
-    public void setExperencie(int experencie) {
-        this.experencie = experencie;
+    public void setExpNext(int expNext) {
+        this.expNext = expNext;
     }
 
-    public int getLifeAcual() {
-        return lifeAcual;
+    public int getLife() {
+        return life;
     }
 
-    public void setLifeAcual(int lifeAcual) {
-        this.lifeAcual = lifeAcual;
+    public void setLife(int life) {
+        this.life = life;
     }
 
     public int getLifeMax() {
@@ -95,20 +98,20 @@ public class Hero {
         this.lifeMax = lifeMax;
     }
 
-    public int getDmg() {
-        return dmg;
+    public int getAttack() {
+        return attack;
     }
 
-    public void setDmg(int dmg) {
-        this.dmg = dmg;
+    public void setAttack(int attack) {
+        this.attack = attack;
     }
 
-    public int getDef() {
-        return def;
+    public int getDefense() {
+        return defense;
     }
 
-    public void setDef(int def) {
-        this.def = def;
+    public void setDefense(int defense) {
+        this.defense = defense;
     }
 
     public int getSpeed() {
@@ -127,20 +130,20 @@ public class Hero {
         this.money = money;
     }
 
-    public Calidad getEquipamiento() {
-        return equipamiento;
+    public Calidad getTipoCalidad() {
+        return tipoCalidad;
     }
 
-    public void setEquipamiento(Calidad equipamiento) {
-        this.equipamiento = equipamiento;
+    public void setTipoCalidad(Calidad tipoCalidad) {
+        this.tipoCalidad = tipoCalidad;
     }
 
-    public ArrayList<ItemsHero> getInventory() {
+    public static HashMap<String, Items> getInventory() {
         return inventory;
     }
 
-    public void setInventory(ArrayList<ItemsHero> inventory) {
-        this.inventory = inventory;
+    public void setInventory(HashMap<String, Items> inventory) {
+        Hero.inventory = inventory;
     }
 
     public Mision getMisionActual() {
@@ -151,12 +154,20 @@ public class Hero {
         this.misionActual = misionActual;
     }
 
-    public ArrayList<Mision> getMisionesCompletas() {
-        return misionesCompletas;
+    public ArrayList<String> getItemMision() {
+        return itemMision;
     }
 
-    public void setMisionesCompletas(ArrayList<Mision> misionesCompletas) {
-        this.misionesCompletas = misionesCompletas;
+    public void setItemMision(ArrayList<String> itemMision) {
+        this.itemMision = itemMision;
+    }
+
+    public ArrayList<Mision> getMisionesCompletadas() {
+        return misionesCompletadas;
+    }
+
+    public void setMisionesCompletadas(ArrayList<Mision> misionesCompletadas) {
+        this.misionesCompletadas = misionesCompletadas;
     }
 
     @Override
@@ -164,130 +175,134 @@ public class Hero {
         return "Hero{" +
                 "name='" + name + '\'' +
                 ", level=" + level +
-                ", nextlvl=" + nextlvl +
-                ", lvlMax=" + lvlMax +
-                ", experencie=" + experencie +
-                ", lifeAcual=" + lifeAcual +
+                ", levelMax=" + levelMax +
+                ", exp=" + exp +
+                ", expNext=" + expNext +
+                ", life=" + life +
                 ", lifeMax=" + lifeMax +
-                ", dmg=" + dmg +
-                ", def=" + def +
+                ", attack=" + attack +
+                ", defense=" + defense +
                 ", speed=" + speed +
                 ", money=" + money +
-                ", equipamiento=" + equipamiento +
+                ", tipoCalidad=" + tipoCalidad +
                 ", inventory=" + inventory +
                 ", misionActual=" + misionActual +
-                ", misionesCompletas=" + misionesCompletas +
+                ", itemMision=" + itemMision +
+                ", misionesCompletadas=" + misionesCompletadas +
                 '}';
     }
 
+
     //OTRAS FUNCIONES
 
-    public void addMision(Mision mision){
-        misionesCompletas.add(mision);
+    public void addMision(Mision mision) {
+        misionesCompletadas.add(mision);
     }
 
-    public static ItemsHero buscarObjeto(Hero hero, String item) {
+    public static boolean buscarObjetoMision(ArrayList<String> buscador, String item) {
+        return buscador.contains(item);
+    }
 
-        for(ItemsHero itemsHero : hero.getInventory()){
-            if(itemsHero.getNombre().equals(item)){
-                return itemsHero;
+    public void addItemMision(String item) {
+        inventory.get(item);
+    }
+
+    public void removeItemMision(String item) {
+        inventory.remove(item);
+    }
+
+    public static Items buscarObjeto(String itemName) {
+        return inventory.get(itemName);
+    }
+
+    public static boolean buscarCurabool(boolean combat) {
+        for (Items item : inventory.values()) {
+            if (item.getTipoObjeto() == TipoObjeto.CURE) {
+                return true;
             }
         }
+        return false;
+    }
 
+
+    public static Items buscarCura(boolean combat) {
+        for (Items item : inventory.values()) {
+            if (item.getTipoObjeto() == TipoObjeto.CURE) {
+                return item;
+            }
+        }
         return null;
     }
 
-    public static boolean buscarObjetoMision(Hero hero, String item, int cantidad) {
-
-        boolean completada = false;
-
-        for(ItemsHero itemsHero : hero.getInventory()){
-            if(itemsHero.getNombre().equals(item)){
-                if (itemsHero.getCantidad()==cantidad){
-                    hero.menosCantidad(itemsHero,cantidad);
-                    completada = true;
-                }
-            }
-        }
-        return completada;
+    public static boolean buscarObjetoBool(String item) {
+        return inventory.containsKey(item); // Busca en el HashMap
     }
 
-    public static boolean buscarObjetoBool(Hero hero, String item) {
-        boolean completada = false;
+    public void addInventory(Items item) {
+        if (inventory.containsKey(item.getNombre())) {
+            Items existingItem = inventory.get(item.getNombre());
+            existingItem.setCantidadCoste(existingItem.getCantidadCoste() + item.getCantidadCoste());
+        } else {
+            inventory.put(item.getNombre(), item);
+        }
+    }
 
-        for(ItemsHero itemsHero : hero.getInventory()){
-            if (itemsHero.getNombre().equals(item)) {
-                completada = true;
+    public static void usarCura(Hero hero, Items itemCura) {
+        if (itemCura.getTipoObjeto() == TipoObjeto.CURE) {
+            hero.life = Math.min(hero.getLife() + itemCura.getEfecto(), hero.getLifeMax());
+            menosCantidad(itemCura);
+        }
+    }
+
+    public static void menosCantidad(Items item) {
+        Items existingItem = inventory.get(item.getNombre());
+        if (existingItem != null) {
+            int newQuantity = existingItem.getCantidadCoste() - 1;
+            if (newQuantity <= 0) {
+                removeInventory(item);
+            } else {
+                existingItem.setCantidadCoste(newQuantity);
+            }
+        }
+    }
+
+    public static void removeInventory(Items item) {
+        inventory.remove(item.getNombre());
+    }
+
+    public void calidad(Calidad objeto) {
+        switch (objeto) {
+            case STANDARD:
+                attack += 5;
+                defense += 5;
+                lifeMax += 10;
                 break;
-            }
-        }
-        return completada;
-    }
-
-    public void addInventory(ItemsHero taberna, int cantidad){
-        for(ItemsHero itemsHero: inventory){
-            if(itemsHero.getNombre().equals(taberna.getNombre())){
-                itemsHero.setCantidad(itemsHero.getCantidad()+cantidad);
-            }else
-                inventory.add(new ItemsHero(inventory.size()+1, taberna.getNombre(), taberna.getDescripcion(), cantidad));
-        }
-    }
-
-    public void addInventory(Tienda tienda, int cantidad){
-        for(ItemsHero itemsHero: inventory){
-            if(itemsHero.getNombre().equals(tienda.getNombre())){
-                itemsHero.setCantidad(itemsHero.getCantidad()+cantidad);
-            }else
-                inventory.add(new ItemsHero(inventory.size()+1, tienda.getNombre(), tienda.getDescripcion(), cantidad));
-        }
-    }
-    public void menosCantidad(ItemsHero itemsHero){
-        itemsHero.setCantidad(itemsHero.getCantidad()-1);
-        if(itemsHero.getCantidad()==0){
-            removeInventory(itemsHero);
-        }
-    }
-    public void menosCantidad(ItemsHero itemsHero, int cantidad){
-        itemsHero.setCantidad(itemsHero.getCantidad()-cantidad);
-        if(itemsHero.getCantidad()==0){
-            removeInventory(itemsHero);
-        }
-    }
-    public void removeInventory(ItemsHero itemsHero){
-        inventory.remove(itemsHero);
-    }
-
-    public void calidad(Calidad objeto){
-        if (objeto == Calidad.LEGEND){
-            dmg += 100;
-            def += 100;
-        }
-        else if (objeto == Calidad.EPIC){
-            dmg += 50;
-            def += 50;
-        }
-        else if (objeto == Calidad.RARE){
-            dmg += 25;
-            def += 25;
-        }
-        else{
-            dmg += 10;
-            def += 10;
+            case RARE:
+                attack += 10;
+                defense += 10;
+                lifeMax += 20;
+                break;
+            case EPIC:
+                attack += 20;
+                defense += 20;
+                lifeMax += 40;
+                break;
+            case LEGEND:
+                attack += 40;
+                defense += 40;
+                lifeMax += 80;
+                break;
         }
     }
 
     public void subirNivel() {
-        int subidaEstadistica = 10;
-        int subidaNivel = 100;
-
-        experencie -= nextlvl;
-        nextlvl += subidaNivel;
-        level++;
-
-        lifeMax += subidaEstadistica;
-        dmg += subidaEstadistica;
-        def += subidaEstadistica;
-        speed += subidaEstadistica;
-
+        this.level++;
+        this.exp = 0;
+        this.expNext += 100;
+        this.lifeMax += 10;
+        this.attack += 10;
+        this.defense += 10;
+        this.speed += 10;
+        this.life = this.lifeMax;
     }
 }
