@@ -204,11 +204,11 @@ public class Hero {
     }
 
     public void addItemMision(String item) {
-        inventory.get(item);
+        itemMision.add(item);
     }
 
     public void removeItemMision(String item) {
-        inventory.remove(item);
+        itemMision.remove(item);
     }
 
     public static Items buscarObjeto(String itemName) {
@@ -275,22 +275,18 @@ public class Hero {
             case STANDARD:
                 attack += 5;
                 defense += 5;
-                lifeMax += 10;
                 break;
             case RARE:
                 attack += 10;
                 defense += 10;
-                lifeMax += 20;
                 break;
             case EPIC:
                 attack += 20;
                 defense += 20;
-                lifeMax += 40;
                 break;
             case LEGEND:
                 attack += 40;
                 defense += 40;
-                lifeMax += 80;
                 break;
         }
     }

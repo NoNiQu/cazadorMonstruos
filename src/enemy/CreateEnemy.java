@@ -3,6 +3,7 @@ package enemy;
 import java.util.ArrayList;
 
 public class CreateEnemy {
+
         public static ArrayList<Enemy> Bestiary(){
             ArrayList<Enemy> enemies = new ArrayList<>();
 

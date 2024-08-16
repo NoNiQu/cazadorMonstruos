@@ -51,7 +51,10 @@ public class GameEnginer {
                     misionesDisponibles(hero, zonaSeleccionada(sc), sc);
                     break;
                 case 2:
-                    entregaMision(hero);
+                    if(hero.getMisionActual()!=null)
+                        entregaMision(hero);
+                    else
+                        System.out.println("No tienes ninguna mision activa");
                     break;
                 case 3:
                     abrirTienda(hero, sc);
