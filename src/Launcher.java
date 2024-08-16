@@ -30,7 +30,7 @@ public class Launcher {
                             " Lo más importante es escoger un nombre para tu héroe!! guay, grandioso... Di un dichoso nombre:");
                     String nombre = sc.nextLine();
                     System.out.println("Encantado de conocerte capitán Gilipollas. Te vas a creer que vas a escoger nombre "+ nombre + " en MI juego, jeje. Bueno al meollo disfruta!");
-                    Hero hero = new Hero("Gilipollas", 1,100,30,0,50,50,10,10, 15, 15, Calidad.STANDARD,null);
+                    Hero hero = new Hero("Gilipollas", 1,100,0,100,50,50,10,10, 15, 15, Calidad.STANDARD,null);
                     GameEnginer.Posada(hero, sc);
                     break;
                 case 2:

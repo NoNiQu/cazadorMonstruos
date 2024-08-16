@@ -39,7 +39,8 @@ public class GameEnginer {
             System.out.println("5. Descansar");
             System.out.println("6. Guardar Partida");
             System.out.println("7. Llamar a la puerta");
-            System.out.println("8. Huir del pueblo");
+            System.out.println("8. Puerta Antigua");
+            System.out.println("9. Huir del pueblo");
 
             int opcion = sc.nextInt();
             sc.nextLine();
@@ -71,12 +72,19 @@ public class GameEnginer {
                     break;
                 case 7:
                     if (herreroLoco){
-                        Enemy enemy = new Enemy(13,"S", 10, 10,"Ormr, el Dragon regente", 4, 0,15,100,"Cabeza de Halcon Real","BossFinal", true);
+                        Enemy enemy = new Enemy(13,"S", 300, 300,"Ormr, el Dragon regente", 25, 20,30,0,"Llave secreta","BossFinal", true);
                         eventoBossSecreto(hero, enemy, sc);
                     }else
                         System.out.println("No parece ocurrir nada.");
                     break;
                 case 8:
+                    String endGame = "Llave secreta";
+                    if(Hero.buscarObjetoBool(endGame)){
+                        System.out.println("Largo de mi puto juego");
+                        salir=true;
+                    }
+                    break;
+                case 9:
                     System.out.println("Buena suerte amigo...");
                     System.out.println("Huyes del pueblo y te mueres por frio fin de la partida gilipollas");
                     System.out.println("GAME OVER");
@@ -251,7 +259,7 @@ public class GameEnginer {
     }
 
     private static void abrirHerrero(Hero hero, Scanner sc) {
-        String secretItem = "SHINE ROCKS";
+        String secretItem = "Shiny rocks";
 
         if(Hero.buscarObjetoBool(secretItem)){
             eventoHerreroEspecial(secretItem, hero);
@@ -326,8 +334,9 @@ public class GameEnginer {
     private static void eventoBossSecreto(Hero hero, Enemy enemy, Scanner sc) {
         System.out.println("MIUA MIUA ****");
         Overworld.Boss(hero, enemy, sc);
-        System.out.println("GG has terminado el juego");
+        System.out.println("Enhorabuena! ahora puedes usar la llave para entra en la puerta antigua");
     }
+
 
 
 }
