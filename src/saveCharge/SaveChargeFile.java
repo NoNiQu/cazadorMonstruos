@@ -1,4 +1,4 @@
-    package saveCharge;
+package saveCharge;
 
 import base.Items;
 import hero.Calidad;
@@ -109,15 +109,15 @@ public class SaveChargeFile {
                         }
                         break;
                     case "misionActual":
-                        String misionLine = reader.readLine();
-                        if (!misionLine.equals("misionActual=null")) {
+                        String misionLine = parts[1]; // Se cambia la asignación de la línea directamente desde parts[1]
+                        if (!misionLine.equals("null")) {
                             misionActual = new Mision(misionLine);
                         }
                         break;
                     case "misionesCompletadasSize":
                         int misionesSize = Integer.parseInt(parts[1]);
                         for (int i = 0; i < misionesSize; i++) {
-                            String misionCompletadaLine = reader.readLine();
+                            String misionCompletadaLine = reader.readLine().split("=")[1]; // Asegura que solo se asigna el valor de la misión
                             Mision misionCompletada = new Mision(misionCompletadaLine);
                             misionesCompletadas.add(misionCompletada);
                         }
@@ -134,5 +134,6 @@ public class SaveChargeFile {
         }
         return hero;
     }
+
 
 }
